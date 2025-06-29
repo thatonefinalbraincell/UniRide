@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniRide - Campus Ride Sharing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            background: linear-gradient(135deg, #f5f7fb 0%, #e6e9ff 100%);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding-right: 50px;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: var(--dark);
+        }
+        
+        .hero-text h1 span {
+            color: var(--primary);
+        }
+        
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+        
+        .phone-mockup {
+            width: 100%;
+            max-width: 350px;
+            position: relative;
+            margin: 0 auto;
+        }
+        
+        .phone-mockup img {
+            width: 100%;
+            display: block;
+        }
+        
+        .screen-content {
+            position: absolute;
+            top: 5%;
+            left: 6.5%;
+            width: 87%;
+            height: 90%;
+            border-radius: 25px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .mockup-map {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+            position: relative;
+        }
+        
+        .map-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .map-marker:nth-child(1) {
+            top: 30%;
+            left: 40%;
+        }
+        
+        .map-marker:nth-child(2) {
+            top: 60%;
+            left: 55%;
+        }
+        
+        .map-marker:nth-child(3) {
+            top: 45%;
+            left: 30%;
+        }
+        
+        .map-marker:nth-child(4) {
+            top: 70%;
+            left: 45%;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: var(--primary);
+            font-size: 32px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+        }
+        
+        /* Auth Section */
+        .auth-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #e6e9ff 0%, #f5f7fb 100%);
+        }
+        
+        .auth-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+        }
+        
+        .auth-image {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: white;
+        }
+        
+        .auth-image-content {
+            text-align: center;
+        }
+        
+        .auth-image-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .auth-form {
+            flex: 1;
+            padding: 50px;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .form-header h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .form-header p {
+            color: var(--gray);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .tab {
+            padding: 12px 30px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .form-container {
+            display: none;
+        }
+        
+        .form-container.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+        
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--gray);
+        }
+        
+        select.form-control {
+            appearance: none;
+            background: white;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .form-footer p {
+            color: var(--gray);
+            margin-top: 15px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 70px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .footer-about p {
+            color: #adb5bd;
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .footer-heading {
+            font-size: 18px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-text {
+                padding-right: 0;
+                margin-bottom: 50px;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .auth-container {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.8rem;
+            }
+            
+            .auth-form {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-car"></i>
+                    UniRide
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#safety">Safety</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <a href="#auth" class="btn">Get Started</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Ride <span>Campus</span> with Fellow Students</h1>
+                    <p>UniRide connects student drivers with student riders for safe, affordable, and convenient transportation around campus and nearby areas.</p>
+                    <div class="hero-buttons">
+                        <a href="#auth" class="btn">Join Now</a>
+                        <a href="#features" class="btn btn-outline">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="phone-mockup">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzUwIiBoZWlnaHQ9IjcwMCIgdmlld0JveD0iMCAwIDM1MCA3MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHJlY3Qgd2lkdGg9IjM1MCIgaGVpZ2h0PSI3MDAiIHJ4PSI0MCIgZmlsbD0iIzFBMUUyQSIvPgogIDxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjMzMCIgaGVpZ2h0PSI2ODAiIHJ4PSIzMCIgZmlsbD0iIzIyMiIvPgo8L3N2Zz4=" alt="Phone Mockup">
+                        <div class="screen-content">
+                            <div class="mockup-map">
+                                <div class="map-marker"></div>
+                                <div class="map-marker"></div>
+                                <div class="map-marker"></div>
+                                <div class="map-marker"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why Choose UniRide</h2>
+                <p>Designed exclusively for the college community with safety and convenience in mind</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Students Only</h3>
+                    <p>Verified college students as both drivers and riders for a trusted community experience</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <h3>Affordable Rides</h3>
+                    <p>Rides at student-friendly prices that won't break your budget</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Safety First</h3>
+                    <p>In-app safety features, student verification, and 24/7 support</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>Campus Routes</h3>
+                    <p>Optimized routes for campus locations and popular student spots</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>Flexible Driving</h3>
+                    <p>Earn money on your schedule by giving rides between classes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Carpool Option</h3>
+                    <p>Share rides with classmates going the same way to save more</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Section -->
+    <section class="auth-section" id="auth">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-image">
+                    <div class="auth-image-content">
+                        <i class="fas fa-car" style="font-size: 5rem; margin-bottom: 30px;"></i>
+                        <h2>Join Our Campus Community</h2>
+                        <p>Thousands of students are already connecting through UniRide</p>
+                    </div>
+                </div>
+                <div class="auth-form">
+                    <div class="form-header">
+                        <h2>Get Started</h2>
+                        <p>Create an account or sign in to access UniRide</p>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-tab="signup">Sign Up</div>
+                        <div class="tab" data-tab="login">Log In</div>
+                    </div>
+                    
+                    <!-- Sign Up Form -->
+                    <div id="signup-form" class="form-container active">
+                        <form id="signupForm">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" class="form-control" placeholder="Enter your full name" required>
+                                <div class="error-message" id="name-error">Please enter your name</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">College Email</label>
+                                <input type="email" id="email" class="form-control" placeholder="Enter your college email" required>
+                                <div class="error-message" id="email-error">Please enter a valid college email</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" class="form-control" placeholder="Create a password" required>
+                                <div class="error-message" id="password-error">Password must be at least 6 characters</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="department">Department</label>
+                                <input type="text" id="department" class="form-control" placeholder="e.g. Computer Science" required>
+                                <div class="error-message" id="department-error">Please enter your department</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="college">College</label>
+                                <div class="select-wrapper">
+                                    <select id="college" class="form-control" required>
+                                        <option value="" disabled selected>Select your college</option>
+                                        <option value="Stanford University">Stanford University</option>
+                                        <option value="MIT">Massachusetts Institute of Technology</option>
+                                        <option value="Harvard University">Harvard University</option>
+                                        <option value="University of California">University of California</option>
+                                        <option value="NYU">New York University</option>
+                                        <option value="University of Texas">University of Texas</option>
+                                        <option value="University of Michigan">University of Michigan</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="error-message" id="college-error">Please select your college</div>
+                            </div>
+                            
+                            <button type="submit" class="btn" style="width: 100%;">Create Account</button>
+                        </form>
+                        
+                        <div class="form-footer">
+                            <p>By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Login Form -->
+                    <div id="login-form" class="form-container">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="login-email">College Email</label>
+                                <input type="email" id="login-email" class="form-control" placeholder="Enter your college email" required>
+                                <div class="error-message" id="login-email-error">Please enter your college email</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="login-password">Password</label>
+                                <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+                                <div class="error-message" id="login-password-error">Please enter your password</div>
+                            </div>
+                            
+                            <div class="form-group" style="text-align: right;">
+                                <a href="#" style="color: var(--primary); text-decoration: none;">Forgot Password?</a>
+                            </div>
+                            
+                            <button type="submit" class="btn" style="width: 100%;">Log In</button>
+                        </form>
+                        
+                        <div class="form-footer">
+                            <p>Don't have an account? <a href="#" id="switch-to-signup">Sign Up</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-car"></i> UniRide
+                    </div>
+                    <p>The safe, affordable, and convenient ride-sharing platform exclusively for college students. Join our campus community today!</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links-section">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#safety">Safety</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links-section">
+                    <h3 class="footer-heading">For Students</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Become a Driver</a></li>
+                        <li><a href="#">Student Discounts</a></li>
+                        <li><a href="#">Campus Ambassadors</a></li>
+                        <li><a href="#">Refer a Friend</a></li>
+                        <li><a href="#">Campus Events</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links-section">
+                    <h3 class="footer-heading">Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Safety Center</a></li>
+                        <li><a href="#">Community Guidelines</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 UniRide. All rights reserved. Made for students, by students.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Hide all forms
+                document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                // Show corresponding form
+                document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+            });
+        });
+        
+        // Switch to signup from login footer link
+        document.getElementById('switch-to-signup').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+            
+            document.querySelector('[data-tab="signup"]').classList.add('active');
+            document.getElementById('signup-form').classList.add('active');
+        });
+        
+        // Form validation for signup
+        const signupForm = document.getElementById('signupForm');
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let valid = true;
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            // Name validation
+            if (!signupForm.name.value.trim()) {
+                document.getElementById('name-error').style.display = 'block';
+                valid = false;
+            }
+            
+            // Email validation
+            const email = signupForm.email.value.trim();
+            if (!email || !email.endsWith('.edu')) {
+                document.getElementById('email-error').style.display = 'block';
+                valid = false;
+            }
+            
+            // Password validation
+            if (signupForm.password.value.length < 6) {
+                document.getElementById('password-error').style.display = 'block';
+                valid = false;
+            }
+            
+            // Department validation
+            if (!signupForm.department.value.trim()) {
+                document.getElementById('department-error').style.display = 'block';
+                valid = false;
+            }
+            
+            // College validation
+            if (!signupForm.college.value) {
+                document.getElementById('college-error').style.display = 'block';
+                valid = false;
+            }
+            
+            if (valid) {
+                // In a real app, this would send data to the backend
+                alert('Account created successfully! Redirecting to app...');
+                // Reset form
+                signupForm.reset();
+                
+                // Switch to login
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.form-container').forEach(form => form.classList.remove('active'));
+                document.querySelector('[data-tab="login"]').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+                
+                // Pre-fill login email
+                document.getElementById('login-email').value = email;
+            }
+        });
+        
+        // Form validation for login
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let valid = true;
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            // Email validation
+            const email = loginForm['login-email'].value.trim();
+            if (!email) {
+                document.getElementById('login-email-error').style.display = 'block';
+                valid = false;
+            }
+            
+            // Password validation
+            if (!loginForm['login-password'].value) {
+                document.getElementById('login-password-error').style.display = 'block';
+                valid = false;
+            }
+            
+            if (valid) {
+                if (valid) {
+    // In a real app, this would send data to the backend
+               window.location.href = 'page2.html'; // Redirect to your app page
+}
+            }
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

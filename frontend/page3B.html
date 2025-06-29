@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniRide - Offer a Ride</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #e0e7ff;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --background: #f5f7fb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
+        }
+        
+        .btn-accent:hover {
+            background: #e41a6f;
+            box-shadow: 0 5px 20px rgba(247, 37, 133, 0.4);
+        }
+        
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-lg {
+            padding: 15px 40px;
+            font-size: 18px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 0;
+        }
+        
+        .driver-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .driver-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .driver-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        .section-title {
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title h2 {
+            font-size: 32px;
+            color: var(--dark);
+        }
+        
+        .section-title i {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background: white;
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .input-icon input {
+            padding-left: 45px;
+        }
+        
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .vehicle-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .vehicle-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .vehicle-option:hover {
+            border-color: var(--primary);
+        }
+        
+        .vehicle-option.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .vehicle-option i {
+            font-size: 30px;
+            margin-bottom: 10px;
+            color: var(--gray);
+        }
+        
+        .vehicle-option.selected i {
+            color: var(--primary);
+        }
+        
+        .vehicle-option h4 {
+            font-size: 16px;
+            color: var(--dark);
+        }
+        
+        .vehicle-option p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .time-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .time-input input {
+            flex: 1;
+        }
+        
+        .map-container {
+            height: 100%;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .map-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .map-title h3 {
+            font-size: 18px;
+            color: var(--dark);
+        }
+        
+        .map-points {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .point {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .point-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .point-info {
+            flex: 1;
+        }
+        
+        .point-info h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .point-info p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .map-mock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #a5b4fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .form-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-about {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .footer-about p {
+            color: #adb5bd;
+            line-height: 1.7;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 14px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .driver-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .input-group {
+                grid-template-columns: 1fr;
+            }
+            
+            .vehicle-selector {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .vehicle-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title h2 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-car"></i>
+                    UniRide
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-road"></i> My Rides</a></li>
+                    <li><a href="#"><i class="fas fa-wallet"></i> Earnings</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                </ul>
+                <div class="user-actions">
+                    <a href="#" class="btn btn-outline btn-icon">
+                        <i class="fas fa-car"></i> Drive Mode
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-title">
+                <i class="fas fa-car-alt"></i>
+                <h2>Offer a Ride to Fellow Students</h2>
+            </div>
+            
+            <div class="driver-container">
+                <div class="driver-card">
+                    <form id="driverForm">
+                        <div class="form-group">
+                            <label for="pickup"><i class="fas fa-location-dot"></i> Starting Point</label>
+                            <div class="input-icon">
+                                <i class="fas fa-location-dot"></i>
+                                <input type="text" id="pickup" class="form-control" placeholder="Enter your starting location" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="destination"><i class="fas fa-flag"></i> Destination</label>
+                            <div class="input-icon">
+                                <i class="fas fa-location-dot"></i>
+                                <input type="text" id="destination" class="form-control" placeholder="Enter your destination" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-car"></i> Vehicle Type</label>
+                            <div class="vehicle-selector">
+                                <div class="vehicle-option" data-value="car">
+                                    <i class="fas fa-car"></i>
+                                    <h4>Car</h4>
+                                    <p>Sedan, SUV, etc.</p>
+                                </div>
+                                <div class="vehicle-option" data-value="bike">
+                                    <i class="fas fa-motorcycle"></i>
+                                    <h4>Bike</h4>
+                                    <p>Motorcycle</p>
+                                </div>
+                                <div class="vehicle-option" data-value="scooter">
+                                    <i class="fas fa-scooter"></i>
+                                    <h4>Scooter</h4>
+                                    <p>Electric scooter</p>
+                                </div>
+                            </div>
+                            <input type="hidden" id="vehicle-type" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="form-group">
+                                <label for="seats"><i class="fas fa-users"></i> Available Seats</label>
+                                <select id="seats" class="form-control" required>
+                                    <option value="" disabled selected>Select seats</option>
+                                    <option value="1">1 seat</option>
+                                    <option value="2">2 seats</option>
+                                    <option value="3">3 seats</option>
+                                    <option value="4">4 seats</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="plate"><i class="fas fa-id-card"></i> License Plate</label>
+                                <input type="text" id="plate" class="form-control" placeholder="Enter plate number" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="departure"><i class="fas fa-clock"></i> Departure Time</label>
+                            <div class="time-input">
+                                <input type="time" id="departure" class="form-control" required>
+                                <span>Estimated arrival: <span id="arrival-time">--:--</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-accent btn-lg btn-icon">
+                                <i class="fas fa-paper-plane"></i> Publish Ride Offer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="driver-card">
+                    <div class="map-container">
+                        <div class="map-overlay">
+                            <div class="map-title">
+                                <i class="fas fa-map-location-dot"></i>
+                                <h3>Your Ride Route</h3>
+                            </div>
+                            <div class="map-points">
+                                <div class="point">
+                                    <div class="point-icon">
+                                        <i class="fas fa-location-dot"></i>
+                                    </div>
+                                    <div class="point-info">
+                                        <h4>Starting Point</h4>
+                                        <p>Student Union Building</p>
+                                    </div>
+                                </div>
+                                <div class="point">
+                                    <div class="point-icon">
+                                        <i class="fas fa-flag"></i>
+                                    </div>
+                                    <div class="point-info">
+                                        <h4>Destination</h4>
+                                        <p>Engineering Building</p>
+                                    </div>
+                                </div>
+                                <div class="point">
+                                    <div class="point-icon">
+                                        <i class="fas fa-car"></i>
+                                    </div>
+                                    <div class="point-info">
+                                        <h4>Vehicle</h4>
+                                        <p>Toyota Camry (4 seats)</p>
+                                    </div>
+                                </div>
+                                <div class="point">
+                                    <div class="point-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="point-info">
+                                        <h4>Departure</h4>
+                                        <p>Today at 15:30</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-mock">
+                            Campus Route Map
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-car"></i> UniRide
+                    </div>
+                    <p>The safe, affordable, and convenient ride-sharing platform exclusively for college students.</p>
+                    <div class="social-links">
+                       <div class="social-links">
+                       <div class="social-links">
+  <a href="https://instagram.com/yourprofile" class="social-link" target="_blank" rel="noopener">
+    <i class="fab fa-instagram"></i>
+  </a>
+  <a href="https://facebook.com/yourprofile" class="social-link" target="_blank" rel="noopener">
+    <i class="fab fa-facebook-f"></i>
+  </a>
+  <a href="https://x.com/yourprofile" class="social-link" target="_blank" rel="noopener">
+    <i class="fab fa-x-twitter"></i>
+  </a>
+  <a href="https://linkedin.com/in/yourprofile" class="social-link" target="_blank" rel="noopener">
+    <i class="fab fa-linkedin-in"></i>
+  </a>
+</div>
+
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 UniRide. All rights reserved. Designed for students, by students.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Vehicle type selection
+        const vehicleOptions = document.querySelectorAll('.vehicle-option');
+        const vehicleTypeInput = document.getElementById('vehicle-type');
+        
+        vehicleOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove selected class from all options
+                vehicleOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Add selected class to clicked option
+                option.classList.add('selected');
+                
+                // Set the hidden input value
+                vehicleTypeInput.value = option.dataset.value;
+            });
+        });
+        
+        // Calculate arrival time
+        const departureInput = document.getElementById('departure');
+        const arrivalTimeSpan = document.getElementById('arrival-time');
+        
+        departureInput.addEventListener('change', () => {
+            if (departureInput.value) {
+                // Add 15-25 minutes for estimated arrival
+                const [hours, minutes] = departureInput.value.split(':').map(Number);
+                const arrivalMinutes = minutes + 15 + Math.floor(Math.random() * 11);
+                const arrivalHours = hours + Math.floor(arrivalMinutes / 60);
+                const finalMinutes = arrivalMinutes % 60;
+                
+                // Format the time
+                const formattedHours = arrivalHours % 24;
+                const formattedMinutes = finalMinutes.toString().padStart(2, '0');
+                const period = formattedHours >= 12 ? 'PM' : 'AM';
+                const displayHours = formattedHours % 12 || 12;
+                
+                arrivalTimeSpan.textContent = `${displayHours}:${formattedMinutes} ${period}`;
+            }
+        });
+        
+        // Update map points based on input
+        const pickupInput = document.getElementById('pickup');
+        const destinationInput = document.getElementById('destination');
+        
+        function updateMapPoints() {
+            const pickupValue = pickupInput.value || 'Student Union Building';
+            const destinationValue = destinationInput.value || 'Engineering Building';
+            
+            document.querySelectorAll('.point-info p')[0].textContent = pickupValue;
+            document.querySelectorAll('.point-info p')[1].textContent = destinationValue;
+        }
+        
+        pickupInput.addEventListener('blur', updateMapPoints);
+        destinationInput.addEventListener('blur', updateMapPoints);
+        
+        // Form submission
+        document.getElementById('driverForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const pickup = pickupInput.value;
+            const destination = destinationInput.value;
+            const vehicleType = vehicleTypeInput.value;
+            const seats = document.getElementById('seats').value;
+            const plate = document.getElementById('plate').value;
+            const departure = departureInput.value;
+            
+            if (!vehicleType) {
+                alert('Please select a vehicle type');
+                return;
+            }
+            
+            if (!pickup || !destination || !seats || !plate || !departure) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Show loading/confirmation
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
+            btn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert(`Ride offer published!\nFrom: ${pickup}\nTo: ${destination}\nVehicle: ${vehicleType}\nSeats: ${seats}\nDeparture: ${departure}`);
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Publish Ride Offer';
+                btn.disabled = false;
+                
+                // Reset form
+                document.getElementById('driverForm').reset();
+                vehicleOptions.forEach(opt => opt.classList.remove('selected'));
+                vehicleTypeInput.value = '';
+                arrivalTimeSpan.textContent = '--:--';
+                updateMapPoints();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

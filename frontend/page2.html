@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniRide - Campus Ride Sharing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --background: #f5f7fb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f4ff 0%, #e6f0ff 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        /* Main Content */
+        .main-content {
+            width: 100%;
+            max-width: 900px;
+            margin: 80px auto 40px;
+            text-align: center;
+        }
+        
+        .hero-text {
+            margin-bottom: 60px;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: var(--dark);
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .selection-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .selection-card {
+            background: white;
+            border-radius: 25px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 15px 50px rgba(67, 97, 238, 0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(67, 97, 238, 0.1);
+        }
+        
+        .selection-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 60px rgba(67, 97, 238, 0.25);
+        }
+        
+        .card-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        .book-ride .card-icon {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+        
+        .offer-ride .card-icon {
+            background: rgba(247, 37, 133, 0.1);
+            color: var(--accent);
+        }
+        
+        .selection-card h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .selection-card p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 16px 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 5px 20px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(67, 97, 238, 0.4);
+        }
+        
+        .book-ride .btn {
+            background: var(--primary);
+        }
+        
+        .offer-ride .btn {
+            background: var(--accent);
+            box-shadow: 0 5px 20px rgba(247, 37, 133, 0.3);
+        }
+        
+        .offer-ride .btn:hover {
+            background: #e41a6f;
+            box-shadow: 0 8px 25px rgba(247, 37, 133, 0.4);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 50px 0;
+            color: var(--gray);
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .divider span {
+            padding: 0 20px;
+            font-weight: 500;
+        }
+        
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 80px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            min-width: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .stat-card i {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .stat-card p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+            width: 100%;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-about {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .footer-about p {
+            color: #adb5bd;
+            line-height: 1.7;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 14px;
+        }
+        
+        /* Animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .delay {
+            animation-delay: 1s;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .selection-card {
+                max-width: 100%;
+            }
+            
+            .stats {
+                gap: 20px;
+            }
+            
+            .stat-card {
+                min-width: calc(50% - 20px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+            
+            .selection-card {
+                padding: 30px 20px;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-car"></i>
+                    UniRide
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="hero-text">
+            <h1>Get Moving on Campus</h1>
+            <p>Connect with fellow students for safe, affordable rides across campus. Choose your role to get started.</p>
+        </div>
+        
+        <div class="selection-container">
+            <div class="selection-card book-ride floating">
+                <div class="card-icon">
+                    <i class="fas fa-car-side"></i>
+                </div>
+                <h2>Book a Ride</h2>
+                <p>Need to get to class, the library, or a campus event? Find a student driver going your way.</p>
+                <a href="#" class="btn">
+                    <i class="fas fa-search"></i> Find a Driver
+                </a>
+            </div>
+            
+            <div class="selection-card offer-ride floating delay">
+                <div class="card-icon">
+                    <i class="fas fa-user-friends"></i>
+                </div>
+                <h2>Offer a Ride</h2>
+                <p>Going somewhere? Share your ride with fellow students and earn money on your schedule.</p>
+                <a href="page3.html" class="btn">
+                    <i class="fas fa-road"></i> Start Driving
+                </a>
+            </div>
+        </div>
+        
+        <div class="divider">
+            <span>Why choose UniRide</span>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <i class="fas fa-user-graduate"></i>
+                <h3>_K+</h3>
+                <p>Student Users</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-car"></i>
+                <h3>_K+</h3>
+                <p>Daily Rides</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-university"></i>
+                <h3>_+</h3>
+                <p>Campus Partners</p>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-dollar-sign"></i>
+                <h3>40%</h3>
+                <p>Savings vs Taxis</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-car"></i> UniRide
+                    </div>
+                    <p>The safe, affordable, and convenient ride-sharing platform exclusively for college students.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 UniRide. All rights reserved. Designed for students, by students.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple hover effect enhancement
+        document.querySelectorAll('.selection-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.remove('floating', 'delay');
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.classList.add('floating');
+                if (card.classList.contains('offer-ride')) {
+                    card.classList.add('delay');
+                }
+            });
+        });
+        
+        // Button click handlers
+        document.querySelector('.book-ride .btn').addEventListener('click', (e) => {
+            e.preventDefault();
+             window.location.href = 'page3A.html';
+        });
+        
+     document.querySelector('.offer-ride .btn').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = 'page3B.html'; // ✅ Your actual redirect
+});
+ 
+    </script>
+</body>
+</html>

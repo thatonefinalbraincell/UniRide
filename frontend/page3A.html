@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniRide - Campus Ride Sharing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #4cc9f0;
+            --background: #f5f7fb;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 16px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 0;
+        }
+        
+        .booking-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        
+        .booking-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+        
+        .section-title {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0,0,0,0.05);
+        }
+        
+        .section-title h2 {
+            font-size: 28px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title i {
+            color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 16px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background: white;
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .input-icon input {
+            padding-left: 45px;
+        }
+        
+        .students-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 12px;
+        }
+        
+        .students-selector button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .students-selector button:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .students-selector span {
+            font-size: 18px;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .map-container {
+            height: 100%;
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .map-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .map-title h3 {
+            font-size: 18px;
+            color: var(--dark);
+        }
+        
+        .map-points {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .point {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .point-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .point-info {
+            flex: 1;
+        }
+        
+        .point-info h4 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .point-info p {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .map-mock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #a5b4fc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .estimated-ride {
+            margin-top: 30px;
+            background: #f0f7ff;
+            border-radius: 16px;
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .ride-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .info-text h4 {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+        
+        .info-text p {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-about {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .footer-about p {
+            color: #adb5bd;
+            line-height: 1.7;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .footer-heading {
+            font-size: 18px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-links a i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #adb5bd;
+            font-size: 14px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .booking-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .map-container {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .ride-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-car"></i>
+                    UniRide
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#"><i class="fas fa-history"></i> Rides</a></li>
+                    <li><a href="#"><i class="fas fa-wallet"></i> Wallet</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                </ul>
+                <div class="user-actions">
+                    <a href="#" class="btn btn-outline btn-sm btn-icon">
+                        <i class="fas fa-car"></i> Drive
+                    </a>
+                    <a href="#" class="btn btn-sm btn-icon">
+                        <i class="fas fa-user"></i> Alex
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-map-marker-alt"></i> Book Campus Ride</h2>
+            </div>
+            
+            <div class="booking-container">
+                <div class="booking-card">
+                    <div class="form-group">
+                        <label for="pickup"><i class="fas fa-map-pin"></i> Pickup Location</label>
+                        <div class="input-icon">
+                            <i class="fas fa-location-dot"></i>
+                            <input type="text" id="pickup" class="form-control" placeholder="Enter pickup location">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="destination"><i class="fas fa-flag"></i> Destination</label>
+                        <div class="input-icon">
+                            <i class="fas fa-location-dot"></i>
+                            <input type="text" id="destination" class="form-control" placeholder="Enter destination">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-users"></i> Number of Students</label>
+                        <div class="students-selector">
+                            <button id="decrease-students">-</button>
+                            <span id="student-count">1</span>
+                            <button id="increase-students">+</button>
+                            <p>student(s) riding</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label><i class="fas fa-clock"></i> Schedule Ride (Optional)</label>
+                        <select class="form-control">
+                            <option>Ride now</option>
+                            <option>Schedule for later</option>
+                        </select>
+                    </div>
+                    
+                    <div class="estimated-ride">
+                        <div class="ride-info">
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="info-text">
+                                    <h4>Estimated Time</h4>
+                                    <p>8-12 minutes</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+                                <div class="info-text">
+                                    <h4>Estimated Cost</h4>
+                                    <p>$4.50 - $6.00</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="btn btn-icon" style="flex: 1;">
+                            <i class="fas fa-search"></i> Find Student Drivers
+                        </button>
+                        <button class="btn btn-outline btn-icon" style="flex: 1;">
+                            <i class="fas fa-car"></i> Offer to Drive
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="booking-card">
+                    <div class="map-container">
+                        <div class="map-overlay">
+                            <div class="map-title">
+                                <i class="fas fa-map-location-dot"></i>
+                                <h3>Campus Route Preview</h3>
+                            </div>
+                            <div class="map-points">
+                                <div class="point">
+                                    <div class="point-icon">
+                                        <i class="fas fa-location-dot"></i>
+                                    </div>
+                                    <div class="point-info">
+                                        <h4>Pickup Location</h4>
+                                        <p>Student Union Building</p>
+                                    </div>
+                                </div>
+                                <div class="point">
+                                    <div class="point-icon">
+                                        <i class="fas fa-flag"></i>
+                                    </div>
+                                    <div class="point-info">
+                                        <h4>Destination</h4>
+                                        <p>Engineering Building</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="map-mock">
+                            Campus Map
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-car"></i> UniRide
+                    </div>
+                    <p>The safe, affordable, and convenient ride-sharing platform exclusively for college students.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> How It Works</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Safety</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">For Students</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Become a Driver</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Student Discounts</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Campus Events</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Refer a Friend</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-envelope"></i> support@uniride.edu</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> (555) 123-4567</a></li>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Campus Center, Room 205</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 UniRide. All rights reserved. Designed for students, by students.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Student counter functionality
+        const studentCount = document.getElementById('student-count');
+        const decreaseBtn = document.getElementById('decrease-students');
+        const increaseBtn = document.getElementById('increase-students');
+        
+        let count = 1;
+        
+        decreaseBtn.addEventListener('click', () => {
+            if (count > 1) {
+                count--;
+                studentCount.textContent = count;
+            }
+        });
+        
+        increaseBtn.addEventListener('click', () => {
+            if (count < 4) {
+                count++;
+                studentCount.textContent = count;
+            } else {
+                alert('Maximum of 4 students per ride');
+            }
+        });
+        
+        // Form submission handling
+        document.querySelector('.btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const pickup = document.getElementById('pickup').value;
+            const destination = document.getElementById('destination').value;
+            
+            if (!pickup || !destination) {
+                alert('Please enter both pickup and destination locations');
+                return;
+            }
+            
+            // Show loading/confirmation
+            const btn = e.target;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finding Drivers...';
+            btn.disabled = true;
+            
+            // Simulate API call
+            setTimeout(() => {
+                alert(`Ride requested from ${pickup} to ${destination} for ${count} student(s)! Drivers are being notified.`);
+                btn.innerHTML = '<i class="fas fa-search"></i> Find Student Drivers';
+                btn.disabled = false;
+            }, 2000);
+        });
+        
+        // Update map points based on input
+        const pickupInput = document.getElementById('pickup');
+        const destinationInput = document.getElementById('destination');
+        
+        pickupInput.addEventListener('blur', updateMapPoints);
+        destinationInput.addEventListener('blur', updateMapPoints);
+        
+        function updateMapPoints() {
+            const pickupValue = pickupInput.value || 'Student Union Building';
+            const destinationValue = destinationInput.value || 'Engineering Building';
+            
+            document.querySelectorAll('.point-info h4')[0].nextElementSibling.textContent = pickupValue;
+            document.querySelectorAll('.point-info h4')[1].nextElementSibling.textContent = destinationValue;
+        }
+    </script>
+</body>
+</html>
