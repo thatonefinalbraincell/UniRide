@@ -1,13 +1,54 @@
 # 🚗 UniRide — College Campus Ride-Sharing Platform
 
-**UniRide** is a student-focused, campus ride-sharing web application built for college universities. It connects student drivers with student riders looking for a lift across campus or around the city.
+**UniRide** is a student-focused, campus ride-sharing web application built for college universities (such as CUSAT, Kochi). It connects verified student drivers with student riders looking for a lift across campus or around the city.
+
+---
+
+## 🏗️ System Architecture & Data Flow
+
+```
+                               +-----------------------+
+                               |     CLIENT BROWSER    |
+                               | (HTML5, CSS3, JS ES6) |
+                               +-----------+-----------+
+                                           |
+                    HTTP / REST API Calls  |  Leaflet Map Tiles & OSRM Routes
+                                           v
+       +-----------------------------------+-----------------------------------+
+       |                                                                       |
+       v                                                                       v
++-----------------------------+                           +--------------------+
+|    FastAPI BACKEND SERVER   |                           |   OPENSTREETMAP /  |
+|  - Uvicorn ASGI Server      |                           |     OSRM ENGINE    |
+|  - CORS Middleware          |                           |  - Map Tiles       |
+|  - Pydantic Validation      |                           |  - Routing Engine  |
+|  - JWT Authentication       |                           +--------------------+
++--------------+--------------+
+               |
+               v SQLAlchemy ORM
++-----------------------------+
+|     POSTGRESQL / SUPABASE   |
+|   (or Local SQLite Fallback)|
+|  - Users Table              |
+|  - Vehicles Table           |
+|  - Rides Table              |
+|  - Ride Requests Table      |
++-----------------------------+
+```
+
+### 🔄 End-to-End Data Flow Workflow
+1. **Student Authentication:** Client signs in via Student ID / Email -> FastAPI validates PBKDF2 hashed credentials -> Generates signed JWT access token -> Client stores JWT in `localStorage` for automatic device auto-login.
+2. **Post-Login Role Selector:** Prompt asks user for session mode -> **Rider Mode** or **Driver Mode**.
+3. **Driver Workflow:** Driver registers vehicle -> Selects active vehicle -> Posts ride with origin, destination, departure time, and available seats -> Saved to DB -> OSRM API plots route geometry on the Leaflet map.
+4. **Rider Workflow:** Rider queries rides -> Views driver details, vehicle specs & route -> Submits booking request -> Driver receives notification in "Incoming Requests" -> Driver clicks **Accept ✅** -> Database atomically decrements available seats.
 
 ---
 
 ## 🌟 Key Features
 
 ### 🔐 1. Authentication & Student ID Verification
-* **Student ID Registration:** Log in using your verified **Student ID** (or campus email) and password.
+* **Student ID Registration:** Log in using your verified **Student ID** (e.g. `STU-1001`) or campus email (`alex@cusat.ac.in`) and password.
+* **Device Auto-Login:** Session JWT is stored in `localStorage` for automatic background auto-login on the same device.
 * **Role Flexibility:** Toggle between **Driver Mode** and **Rider Mode** seamlessly within the same interface.
 
 ### 🚗 2. Vehicle Registration & Active Vehicle Selection (Drivers)
@@ -15,14 +56,14 @@
 * **Multi-Vehicle Support:** Save multiple vehicles to your profile.
 * **Active Vehicle Selector:** Choose which vehicle you are driving today from a quick-select dropdown so seating capacity and vehicle info automatically attach to your posted rides!
 
-### 🗺️ 3. Interactive Leaflet Map & OSRM Route Engine
-* **Campus Locations:** Interactive pins for **Main Gate**, **Central Library**, **Science & Tech Quad**, **Engineering Quad**, **North Campus Dorms**, **Sports Complex**, **Student Union**, and **Metro Station**.
-* **OSRM Route Visualizer:** Real-time distance calculation (km), estimated duration (minutes), and dynamic glowing route lines on the Leaflet map.
+### 🗺️ 3. Interactive Leaflet Map & CUSAT OSRM Route Engine
+* **Campus Locations:** Interactive pins for **CUSAT Main Gate**, **School of Engineering (SOE)**, **Dept of Computer Applications (DCA)**, **Central Library**, **Student Amenity Centre**, **Dept of Ship Technology**, **Siberia Hostels**, and **CUSAT Metro Station**.
+* **OSRM Route Visualizer:** Real-time distance calculation (km), estimated duration (minutes), and dynamic route lines on the Leaflet map.
 
 ### 🚙 4. Driver Workflow (Posting & Managing Rides)
 * **Post a Ride:** Select pickup and dropoff points, departure date/time, available seats, price per seat (or free campus pool), and custom notes.
 * **Manage Posted Rides:** View active rides, track booked seats, and change ride status (*Scheduled*, *Active*, *Completed*, *Cancelled*).
-* **Incoming Booking Requests:** View live incoming rider requests and click **Accept ✅** or **Reject ❌** in real-time with instant seat deduction!
+* **Incoming Booking Requests:** View live incoming rider requests and click **Accept ✅** or **Reject ❌** with instant seat deduction!
 
 ### 🚕 5. Rider Workflow (Booking & Requesting Rides)
 * **Discover Rides / Pools:** Search & filter posted driver rides by pickup, destination, seats left, vehicle type, and departure time.
@@ -36,8 +77,8 @@
 
 * **Backend:** FastAPI (Python 3.10+), SQLAlchemy, Pydantic, JWT Auth, OSRM Proxy API
 * **Database:** PostgreSQL (Supabase Compatible) / SQLite (Zero-config local fallback)
-* **Frontend:** HTML5, Modern CSS3 (Glassmorphism, Dark Theme, Micro-animations), Vanilla JavaScript ES6
-* **Maps & Geocoding:** Leaflet.js, CartoDB Dark Tiles, OpenStreetMap OSRM Routing Engine
+* **Frontend:** HTML5, Modern CSS3 (Beige & Walnut Brown Theme, Plus Jakarta Sans font), Vanilla JavaScript ES6
+* **Maps & Geocoding:** Leaflet.js, OpenStreetMap Tiles, OSRM Routing Engine
 
 ---
 
