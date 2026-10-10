@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniRide — College Ride-Sharing Platform</title>
+
+    <!-- Professional Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         VIEW 1: AUTH FIRST LANDING PAGE (Unauthenticated Users)
+         ========================================================================== -->
+    <div id="authLandingView" class="auth-landing" style="display: flex;">
+        <div class="auth-container">
+            
+            <!-- Left Branding Side -->
+            <div class="auth-brand-side">
+                <div>
+                    <div class="brand-logo-large">
+                        <div class="brand-logo-icon">
+                            <i class="fa-solid fa-car-side"></i>
+                        </div>
+                        UniRide
+                    </div>
+                    <p style="color: var(--text-muted); margin-top: 0.75rem; font-size: 0.95rem; line-height: 1.5;">
+                        College Ride-Sharing Platform for CUSAT Students. Connect with verified drivers & campus pools.
+                    </p>
+                </div>
+
+                <div class="auth-feature-list">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-id-card"></i></div>
+                        <div class="feature-text">
+                            <h4>Verified Student IDs</h4>
+                            <p>Exclusive access restricted to registered campus students.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                        <div class="feature-text">
+                            <h4>CUSAT Campus Map & Routes</h4>
+                            <p>Real-time OSRM route calculations between departments and landmarks.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-car"></i></div>
+                        <div class="feature-text">
+                            <h4>Vehicle & Seat Management</h4>
+                            <p>Register multiple vehicles and accept rider requests with instant seat tracking.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.78rem; color: var(--text-muted);">
+                    UniRide Platform • CUSAT Campus
+                </div>
+            </div>
+
+            <!-- Right Auth Forms Side -->
+            <div class="auth-form-side">
+                <div class="auth-tab-header">
+                    <button id="tabBtnLogin" class="auth-tab-btn active">Sign In</button>
+                    <button id="tabBtnSignup" class="auth-tab-btn">Register Student ID</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="formLandingLogin" style="display: flex; flex-direction: column; gap: 1.1rem;">
+                    <div class="form-group">
+                        <label>Student ID or Campus Email</label>
+                        <input type="text" id="landingLoginId" class="form-control" placeholder="e.g. STU-1001 or student@cusat.ac.in" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="landingLoginPass" class="form-control" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; justify-content: center; padding: 11px;">
+                        Sign In to UniRide
+                    </button>
+                </form>
+
+                <!-- Signup Form -->
+                <form id="formLandingSignup" style="display: none; flex-direction: column; gap: 0.9rem;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Student ID</label>
+                            <input type="text" id="landingSignId" class="form-control" placeholder="STU-1001" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="landingSignName" class="form-control" placeholder="Alex Johnson" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Campus Email</label>
+                        <input type="email" id="landingSignEmail" class="form-control" placeholder="alex@cusat.ac.in" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="landingSignPass" class="form-control" placeholder="••••••••" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+                            <input type="text" id="landingSignDept" class="form-control" placeholder="School of Engineering">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem; justify-content: center; padding: 11px;">
+                        Create Account & Register
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ==========================================================================
+         VIEW 2: POST-LOGIN ROLE SELECTION MODAL (#roleSelectModal)
+         ========================================================================== -->
+    <div id="roleSelectModal" class="role-modal-overlay" style="display: none;">
+        <div class="role-modal-card">
+            <h2 style="font-weight: 800; color: var(--primary); font-size: 1.5rem;">Select Your Mode Today</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.5rem;">
+                Are you offering a lift or looking for a ride across CUSAT campus?
+            </p>
+
+            <div class="role-options-grid">
+                <div id="cardSelectRider" class="role-option-card">
+                    <div class="role-option-icon">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <h3>I Need a Ride</h3>
+                    <p>Find available campus pools, view CUSAT routes, and request a seat.</p>
+                </div>
+
+                <div id="cardSelectDriver" class="role-option-card">
+                    <div class="role-option-icon">
+                        <i class="fa-solid fa-steering-wheel"></i>
+                    </div>
+                    <h3>I Am Driving</h3>
+                    <p>Post your route, select your vehicle, and accept student ride requests.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================================================
+         VIEW 3: MAIN DASHBOARD WORKSPACE (#dashboardView)
+         ========================================================================== -->
+    <div id="dashboardView" style="display: none; flex-direction: column; min-height: 100vh;">
+        
+        <!-- Header Navigation -->
+        <header>
+            <div class="navbar">
+                <a href="#" class="brand">
+                    <div class="brand-icon">
+                        <i class="fa-solid fa-car-side"></i>
+                    </div>
+                    <div>
+                        UniRide
+                        <span class="brand-tag">CUSAT Campus</span>
+                    </div>
+                </a>
+
+                <!-- Role Mode Switcher -->
+                <div class="role-switch-container">
+                    <button id="btnRoleRider" class="role-btn active">
+                        <i class="fa-solid fa-user"></i> Rider Mode
+                    </button>
+                    <button id="btnRoleDriver" class="role-btn">
+                        <i class="fa-solid fa-steering-wheel"></i> Driver Mode
+                    </button>
+                </div>
+
+                <!-- Profile / Logout -->
+                <div class="nav-actions">
+                    <div id="userMenu" style="display: flex; align-items: center; gap: 12px;">
+                        <div style="text-align: right;">
+                            <div id="userNameDisplay" style="font-weight: 700; font-size: 0.92rem;">Student Name</div>
+                            <div id="userDeptDisplay" style="font-size: 0.75rem; color: var(--text-muted);">STU-1001 • CUSAT</div>
+                        </div>
+                        <button id="btnLogout" class="btn btn-secondary btn-sm" title="Log Out">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace Layout -->
+        <div class="main-layout">
+            
+            <!-- Left Panel Sidebar -->
+            <div class="sidebar-panel">
+
+                <!-- RIDER VIEW -->
+                <div id="riderView" style="display: flex; flex-direction: column; gap: 1.25rem;">
+                    
+                    <!-- Search Card -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span><i class="fa-solid fa-magnifying-glass" style="color: var(--secondary);"></i> Find a Campus Pool</span>
+                            <button id="btnOpenRequestRideModal" class="btn btn-secondary btn-sm">
+                                <i class="fa-solid fa-plus"></i> Request New Ride
+                            </button>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Origin</label>
+                                <input type="text" id="inputSearchOrigin" class="form-control" placeholder="Search origin campus spot...">
+                            </div>
+                            <div class="form-group">
+                                <label>Destination</label>
+                                <input type="text" id="inputSearchDest" class="form-control" placeholder="Search destination...">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Posted Pools List -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span><i class="fa-solid fa-car" style="color: var(--primary);"></i> Available Student Drivers</span>
+                        </div>
+                        <div id="availableRidesList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Dynamically populated ride cards -->
+                        </div>
+                    </div>
+
+                    <!-- My Bookings -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span><i class="fa-solid fa-clock-rotate-left" style="color: var(--warning);"></i> My Ride Requests & Status</span>
+                        </div>
+                        <div id="riderBookingsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Dynamically populated rider booking requests -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- DRIVER VIEW -->
+                <div id="driverView" style="display: none; flex-direction: column; gap: 1.25rem;">
+
+                    <!-- Vehicle Selector Banner -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span><i class="fa-solid fa-id-card" style="color: var(--secondary);"></i> Active Vehicle Setup</span>
+                            <button id="btnOpenVehicleModal" class="btn btn-secondary btn-sm">
+                                <i class="fa-solid fa-plus"></i> Add Vehicle
+                            </button>
+                        </div>
+
+                        <div class="vehicle-banner">
+                            <div class="vehicle-info">
+                                <i class="fa-solid fa-car-side" style="color: var(--secondary); font-size: 1.1rem;"></i>
+                                <div>
+                                    <div style="font-size:0.72rem; color: var(--text-muted);">CURRENT ACTIVE VEHICLE</div>
+                                    <div id="activeVehicleDisplay" style="font-weight: 700; font-size: 0.92rem;">Select or add vehicle</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Switch Active Vehicle</label>
+                            <select id="selectActiveVehicle" class="form-control">
+                                <!-- Dynamically populated driver vehicles -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Driver Actions & Posted Rides -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span><i class="fa-solid fa-route" style="color: var(--primary);"></i> My Posted Rides</span>
+                            <button id="btnOpenPostRideModal" class="btn btn-primary btn-sm">
+                                <i class="fa-solid fa-circle-plus"></i> Post a Ride
+                            </button>
+                        </div>
+
+                        <div id="driverRidesList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Driver posted rides -->
+                        </div>
+                    </div>
+
+                    <!-- Incoming Rider Booking Requests -->
+                    <div class="card">
+                        <div class="card-title">
+                            <span><i class="fa-solid fa-user-check" style="color: var(--success);"></i> Incoming Rider Requests</span>
+                        </div>
+                        <div id="driverRequestsList" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Incoming requests from riders -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right Panel: Interactive Leaflet Map -->
+            <div class="map-panel">
+                <div id="map"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================================================
+         DIALOG MODALS
+         ========================================================================== -->
+
+    <!-- MODAL: REGISTER VEHICLE (DRIVERS) -->
+    <div id="modalVehicle" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 style="font-weight:700;"><i class="fa-solid fa-car-side" style="color: var(--secondary);"></i> Register New Vehicle</h3>
+
+            <form id="formVehicle" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>License Plate No.</label>
+                        <input type="text" id="vehLicense" class="form-control" placeholder="e.g. KL-07-CB-1234" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Vehicle Type</label>
+                        <select id="vehType" class="form-control">
+                            <option value="car">Sedan / Hatchback</option>
+                            <option value="suv">SUV</option>
+                            <option value="scooter">Scooter / Motorbike</option>
+                            <option value="bike">Electric Bike</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Make & Model</label>
+                        <input type="text" id="vehMakeModel" class="form-control" placeholder="e.g. Honda City" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Seating Capacity</label>
+                        <input type="number" id="vehCapacity" class="form-control" min="1" max="8" value="4" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Color</label>
+                    <input type="text" id="vehColor" class="form-control" placeholder="e.g. White, Black">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="justify-content: center;">
+                    Save & Register Vehicle
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: POST A RIDE (DRIVERS) -->
+    <div id="modalPostRide" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 style="font-weight:700;"><i class="fa-solid fa-route" style="color: var(--primary);"></i> Post Campus Ride</h3>
+
+            <form id="formPostRide" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Origin Campus Location</label>
+                        <select id="postOrigin" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Destination Location</label>
+                        <select id="postDest" class="form-control"></select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Departure Date & Time</label>
+                        <input type="datetime-local" id="postDepTime" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Available Seats</label>
+                        <input type="number" id="postSeats" class="form-control" min="1" max="6" value="3" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Price Per Seat (₹0 for Free Lift)</label>
+                    <input type="number" step="0.5" id="postPrice" class="form-control" placeholder="0.00" value="0.00">
+                </div>
+
+                <div class="form-group">
+                    <label>Notes / Pickup Point Instructions</label>
+                    <textarea id="postNotes" class="form-control" rows="2" placeholder="e.g. Waiting near SOE main entrance steps"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="justify-content: center;">
+                    Post Ride to Campus Pools
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: REQUEST NEW CUSTOM RIDE (RIDERS) -->
+    <div id="modalRequestRide" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3 style="font-weight:700;"><i class="fa-solid fa-hand" style="color: var(--secondary);"></i> Request Custom Ride</h3>
+
+            <form id="formRequestRide" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pickup Spot</label>
+                        <select id="reqPickup" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Dropoff Spot</label>
+                        <select id="reqDropoff" class="form-control"></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Seats Needed</label>
+                    <input type="number" id="reqSeats" class="form-control" min="1" max="4" value="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Notes / Preferred Time</label>
+                    <textarea id="reqNotes" class="form-control" rows="2" placeholder="e.g. Leaving lab around 4:30 PM"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="justify-content: center;">
+                    Submit Request to Campus Drivers
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <!-- UniRide Scripts -->
+    <script src="/static/js/map.js"></script>
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

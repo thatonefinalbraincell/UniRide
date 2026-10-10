@@ -1,0 +1,742 @@
+:root {
+    --bg-body: #f7f4ef;
+    --bg-card: #ffffff;
+    --bg-card-border: #e4ded5;
+    --primary: #3d2b1f;
+    --primary-hover: #2a1d14;
+    --secondary: #7a5c45;
+    --accent: #9e472a;
+    --surface-alt: #efeae1;
+    --surface-hover: #e6dfd3;
+    --text-main: #231b15;
+    --text-muted: #6e6256;
+    --success: #2d6a4f;
+    --warning: #b46912;
+    --danger: #a42c22;
+    --border-radius: 12px;
+    --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Helper Text Truncation & Flex overflow fixes */
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ==========================================================================
+   1. AUTH FIRST LANDING VIEW (#authView)
+   ========================================================================== */
+.auth-landing {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 3vw, 2.5rem);
+    background-color: var(--bg-body);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 960px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    background-color: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(61, 43, 31, 0.06);
+}
+
+.auth-brand-side {
+    background-color: var(--surface-alt);
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid var(--bg-card-border);
+}
+
+.brand-logo-large {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.5px;
+}
+
+.brand-logo-icon {
+    width: 42px;
+    height: 42px;
+    background-color: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.auth-feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin: 2rem 0;
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+}
+
+.feature-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    border: 1px solid var(--bg-card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.feature-text h4 {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.feature-text p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.4;
+}
+
+.auth-form-side {
+    padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 3vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Auth Tabs */
+.auth-tab-header {
+    display: flex;
+    gap: 1.25rem;
+    border-bottom: 2px solid var(--surface-alt);
+    margin-bottom: 1.75rem;
+}
+
+.auth-tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding-bottom: 0.65rem;
+    position: relative;
+    transition: var(--transition);
+}
+
+.auth-tab-btn.active {
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.auth-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+}
+
+/* ==========================================================================
+   2. ROLE SELECTION MODAL (#roleSelectModal)
+   ========================================================================== */
+.role-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(35, 27, 21, 0.6);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+}
+
+.role-modal-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 560px;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    text-align: center;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+.role-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.role-option-card {
+    background-color: var(--bg-body);
+    border: 2px solid var(--bg-card-border);
+    border-radius: 14px;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.role-option-card:hover {
+    border-color: var(--primary);
+    background-color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(61, 43, 31, 0.08);
+}
+
+.role-option-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background-color: var(--surface-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 1.35rem;
+}
+
+.role-option-card h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.role-option-card p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+/* ==========================================================================
+   3. MAIN DASHBOARD WORKSPACE (#dashboardView)
+   ========================================================================== */
+header {
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--bg-card-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--primary);
+    text-decoration: none;
+    letter-spacing: -0.3px;
+    flex-shrink: 0;
+}
+
+.brand-icon {
+    width: 34px;
+    height: 34px;
+    background-color: var(--primary);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.brand-tag {
+    font-size: 0.7rem;
+    background-color: var(--surface-alt);
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--bg-card-border);
+    font-weight: 600;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+}
+
+/* Role Switcher Pill */
+.role-switch-container {
+    display: flex;
+    background-color: var(--surface-alt);
+    padding: 3px;
+    border-radius: 30px;
+    border: 1px solid var(--bg-card-border);
+}
+
+.role-btn {
+    padding: 6px 14px;
+    border-radius: 25px;
+    border: none;
+    background-color: transparent;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.role-btn.active {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--surface-alt);
+    color: var(--text-main);
+    border-color: var(--bg-card-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--surface-hover);
+}
+
+.btn-success {
+    background-color: var(--success);
+    color: #ffffff;
+}
+
+.btn-success:hover {
+    background-color: #23543e;
+}
+
+.btn-danger {
+    background-color: var(--danger);
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background-color: #83231b;
+}
+
+.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    border-radius: 6px;
+}
+
+/* Layout Grid */
+.main-layout {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: 1.25rem;
+    padding: 1.25rem;
+    flex: 1;
+    height: calc(100vh - 65px);
+    width: 100%;
+}
+
+.sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+    min-width: 0; /* Prevents grid item overflow */
+}
+
+.sidebar-panel::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar-panel::-webkit-scrollbar-thumb {
+    background-color: var(--bg-card-border);
+    border-radius: 4px;
+}
+
+.map-panel {
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--bg-card-border);
+    min-height: 450px;
+    background-color: var(--bg-card);
+    width: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* Vehicle Banner */
+.vehicle-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background-color: var(--surface-alt);
+    border: 1px solid var(--bg-card-border);
+    margin-bottom: 0.5rem;
+    gap: 8px;
+}
+
+.vehicle-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+/* Cards */
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: var(--border-radius);
+    padding: 1.15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    min-width: 0;
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Forms & Inputs */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.form-group label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.form-control {
+    background-color: var(--bg-body);
+    border: 1px solid var(--bg-card-border);
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 0.85rem;
+    outline: none;
+    transition: var(--transition);
+    width: 100%;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    background-color: #ffffff;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+/* Ride Items & Text Truncation */
+.ride-item {
+    background-color: var(--bg-body);
+    border: 1px solid var(--bg-card-border);
+    border-radius: 10px;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    transition: var(--transition);
+    cursor: pointer;
+    min-width: 0;
+}
+
+.ride-item:hover {
+    border-color: var(--secondary);
+    background-color: #ffffff;
+}
+
+.ride-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.driver-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    min-width: 0;
+}
+
+.avatar-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.route-preview {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--primary);
+    background-color: var(--surface-alt);
+    padding: 5px 10px;
+    border-radius: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.route-arrow {
+    color: var(--secondary);
+    flex-shrink: 0;
+}
+
+.ride-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.status-pending { background-color: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+.status-accepted { background-color: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+.status-rejected { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.status-active { background-color: #e0f2fe; color: #075985; border: 1px solid #bae6fd; }
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(35, 27, 21, 0.5);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--bg-card-border);
+    border-radius: var(--border-radius);
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: var(--text-main);
+}
+
+/* ==========================================================================
+   4. RESPONSIVE BREAKPOINTS (MOBILE & TABLET FIXES)
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .main-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+        padding: 1rem;
+    }
+
+    .map-panel {
+        height: 380px;
+        min-height: 380px;
+        order: -1; /* Map displays on top for mobile users */
+    }
+}
+
+@media (max-width: 640px) {
+    .navbar {
+        padding: 0.65rem 1rem;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .brand {
+        justify-content: center;
+    }
+
+    .role-switch-container {
+        justify-content: center;
+    }
+
+    .nav-actions {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr; /* Form inputs stack on small mobile screens */
+    }
+
+    .role-options-grid {
+        grid-template-columns: 1fr; /* Role options stack on mobile */
+    }
+
+    .auth-brand-side {
+        display: none;
+    }
+
+    .auth-container {
+        grid-template-columns: 1fr;
+    }
+}
